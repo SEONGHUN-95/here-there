@@ -8,8 +8,10 @@ import com.seonghun.herenthere.dtos.CommentCreateDto;
 import com.seonghun.herenthere.dtos.CommentDto;
 import com.seonghun.herenthere.dtos.CommentUpdateDto;
 import com.seonghun.herenthere.exceptions.CommentNotFound;
+import com.seonghun.herenthere.security.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,8 +48,10 @@ public class CommentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestParam String postId,
+                       Authentication authentication,
                        @RequestBody CommentCreateDto commentCreateDto) {
-        createCommentService.createComment(postId, commentCreateDto);
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+        createCommentService.createComment(postId, authUser.id(), commentCreateDto);
     }
 
     @PatchMapping("/{id}")

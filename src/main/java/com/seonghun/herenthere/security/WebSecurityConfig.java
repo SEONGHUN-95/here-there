@@ -1,5 +1,6 @@
 package com.seonghun.herenthere.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,12 +14,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig {
     private final AccessTokenAuthenticationFilter authenticationFilter;
 
-    public WebSecurityConfig(AccessTokenAuthenticationFilter authenticationFilter) {
-        this.authenticationFilter = authenticationFilter;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

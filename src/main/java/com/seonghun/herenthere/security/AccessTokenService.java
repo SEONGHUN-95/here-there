@@ -19,9 +19,10 @@ public class AccessTokenService {
 
     public Authentication authenticate(String accessToken) {
         if (!accessTokenGenerator.verify(accessToken)) {
+            System.out.println("NOT VERIFIED");
             return null;
         }
-
+        System.out.println("VERIFED BUT COULD NOT FOUND");
         return authUserDao.findByAccessToken(accessToken)
                 .map(authUser ->
                         UsernamePasswordAuthenticationToken.authenticated(

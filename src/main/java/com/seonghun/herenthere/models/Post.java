@@ -1,5 +1,8 @@
 package com.seonghun.herenthere.models;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -7,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "posts")
@@ -14,7 +18,9 @@ public class Post {
     @EmbeddedId
     private PostId id;
 
-    private String author;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
+    private UserId userId;
 
     private String title;
 
@@ -29,10 +35,9 @@ public class Post {
     private Post() {
     }
 
-    public Post(PostId id, String author, String title,
-                String content) {
+    public Post(PostId id, UserId userId, String title, String content) {
         this.id = id;
-        this.author = author;
+        this.userId = userId;
         this.title = title;
         this.content = content;
     }
@@ -41,16 +46,22 @@ public class Post {
         return id;
     }
 
+    public UserId userId() {
+        return userId;
+    }
+
     public String title() {
         return title;
     }
 
-    public String author() {
-        return author;
-    }
 
     public String content() {
         return content;
+    }
+
+    public String createdAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일");
+        return createdAt.format(formatter);
     }
 
     public void update(String title, String content) {

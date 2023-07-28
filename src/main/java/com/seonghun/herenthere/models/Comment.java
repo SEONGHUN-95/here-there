@@ -19,16 +19,18 @@ public class Comment {
 
     private String content;
 
-    private String author;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
+    private UserId userId;
 
     private Comment() {
     }
 
-    public Comment(CommentId id, PostId postId, String content, String author) {
+    public Comment(CommentId id, PostId postId, String content, UserId userId) {
         this.id = id;
         this.postId = postId;
         this.content = content;
-        this.author = author;
+        this.userId = userId;
     }
 
     public CommentId id() {
@@ -39,8 +41,8 @@ public class Comment {
         return postId;
     }
 
-    public String author() {
-        return author;
+    public UserId userId() {
+        return userId;
     }
 
     public String content() {

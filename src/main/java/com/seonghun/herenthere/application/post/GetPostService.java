@@ -5,6 +5,7 @@ import com.seonghun.herenthere.exceptions.PostNotFound;
 import com.seonghun.herenthere.models.Post;
 import com.seonghun.herenthere.models.PostId;
 import com.seonghun.herenthere.repositories.PostRepository;
+import com.seonghun.herenthere.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetPostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     public PostDto getPostDto(String id) {
         Post post = postRepository.findById(PostId.of(id))
                 .orElseThrow(PostNotFound::new);
-
         return new PostDto(post);
     }
 }

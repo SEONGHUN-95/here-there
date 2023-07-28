@@ -24,10 +24,12 @@ public class AccessTokenGenerator {
 
     public boolean verify(String accessToken) {
         try {
+            System.out.println(accessToken);
             JWTVerifier verifier = JWT.require(algorithm).build();
             verifier.verify(accessToken);
             return true;
         } catch (JWTVerificationException e) {
+            System.out.println(e);
             return false;
         }
     }

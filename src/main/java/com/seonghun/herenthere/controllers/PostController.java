@@ -54,6 +54,32 @@ public class PostController {
         return postDto;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPost(Authentication authentication,
+                           @RequestBody PostCreateDto postCreateDto) {
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+        System.out.println("authUser = " + authUser);
+        System.out.println(authentication.getPrincipal());
+        createPostService.createPost(authUser.id(), postCreateDto);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePost(@PathVariable String id,
+                           @RequestBody PostUpdateDto postUpdateDto,
+                           Authentication authentication) {
+        PostDto postDto = getPostService.getPostDto(id);
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+        updatePostService.updatePost(id, postUpdateDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePost(@PathVariable String id) {
+        deletePostService.deletePost(id);
+    }
+
     @PostMapping("/{id}/like")
     @ResponseStatus(HttpStatus.CREATED)
     public void likePost(@PathVariable String id,
@@ -70,25 +96,6 @@ public class PostController {
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
         UserId userId = new UserId(authUser.id());
         likePostService.unlikePost(id, userId.toString());
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createPost(@RequestBody PostCreateDto postCreateDto) {
-        createPostService.createPost(postCreateDto);
-    }
-
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePost(@PathVariable String id,
-                           @RequestBody PostUpdateDto postUpdateDto) {
-        updatePostService.updatePost(id, postUpdateDto);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable String id) {
-        deletePostService.deletePost(id);
     }
 
     @ExceptionHandler(PostNotFound.class)

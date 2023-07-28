@@ -7,9 +7,6 @@ public record PostCreateDto(
         String title,
 
         @NotBlank
-        String content,
-
-        @NotBlank
-        String author
+        String content
 ) {
 }
